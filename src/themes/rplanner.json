@@ -1,0 +1,17 @@
+{
+  "name": "Rplanner",
+  "font_size": 18,
+  "font_name_body": "Rubik",
+  "font_name_heading": "Rubik",
+  "font_name_caption": "Rubik",
+  "font_name_title": "Rubik",
+  "color_focus": "#3584e4",
+  "color_text": "#eeeeee",
+  "color_text_press": "#ffffff",
+  "color_fill_text": "#1e1e1e",
+  "color_fill_container": "#2b2b2b",
+  "color_fill_control": "#404040",
+  "color_fill_hover": "#616161",
+  "color_fill_press": "#b8b8b8",
+  "color_border": "#919191"
+}
