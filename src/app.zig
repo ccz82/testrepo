@@ -1,5 +1,6 @@
 const std = @import("std");
 const dvui = @import("dvui");
+const icons = @import("icons");
 
 const Rplanner = @import("Rplanner.zig");
 const RplannerLight = @import("themes/light.zig").Theme;
@@ -56,20 +57,7 @@ pub fn frame() !dvui.App.Result {
 
     menubar();
 
-    var tbox = dvui.box(@src(), .vertical, .{ .max_size_content = .{ .w = 400, .h = 200 } });
-    defer tbox.deinit();
-
-    {
-        var tabs = dvui.TabsWidget.init(@src(), .{ .dir = .horizontal }, .{ .expand = .horizontal });
-        tabs.install();
-        defer tabs.deinit();
-
-        for (0.., rplanner.files) |i, file| {
-            if (tabs.addTabLabel(rplanner.open_file == i, file)) {
-                rplanner.open_file = i;
-            }
-        }
-    }
+    tabbar();
 
     {
         var hbox = dvui.box(@src(), .horizontal, .{
@@ -89,10 +77,13 @@ pub fn frame() !dvui.App.Result {
     {
         dvui.Examples.show_demo_window = true;
         dvui.Examples.demo();
+        // dvui.Examples.scrollCanvas();
     }
-    // dvui.Examples.scrollCanvas();
 
-    return .ok;
+    return switch (rplanner.running) {
+        true => .ok,
+        false => .close,
+    };
 }
 
 pub fn deinit() void {
@@ -124,11 +115,44 @@ fn menubar() void {
             .padding = .{ .x = 6, .w = 6 },
         },
     )) |r| {
-        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = dvui.Rect.all(0) });
+        var fm = dvui.floatingMenu(
+            @src(),
+            .{ .from = r },
+            .{
+                .padding = dvui.Rect.all(0),
+                .corner_radius = dvui.Rect.all(0),
+            },
+        );
         defer fm.deinit();
 
-        if (dvui.menuItemLabel(@src(), "Close Menu", .{}, .{})) |_| {
-            m.close();
+        {
+            var mi = dvui.menuItem(@src(), .{}, .{});
+            defer mi.deinit();
+
+            var hbox = dvui.box(@src(), .horizontal, .{ .expand = .horizontal });
+            defer hbox.deinit();
+
+            dvui.icon(
+                @src(),
+                "quit",
+                icons.tvg.lucide.@"log-out",
+                .{},
+                .{},
+            );
+
+            dvui.labelNoFmt(@src(), "Quit", .{}, .{ .padding = dvui.Rect.all(0) });
+        }
+
+        if (dvui.menuItemLabel(
+            @src(),
+            "Quit",
+            .{},
+            .{
+                .corner_radius = dvui.Rect.all(0),
+                .padding = .{ .w = 3, .x = 3 },
+            },
+        )) |_| {
+            rplanner.running = false;
         }
     }
 
@@ -186,6 +210,42 @@ fn menubar() void {
             rplanner.scale = @round(dvui.themeGet().font_body.size * rplanner.scale - 1.0) / dvui.themeGet().font_body.size;
             // invalidate = true;
         }
+    }
+}
+
+fn tabbar() void {
+    var tabs = dvui.TabsWidget.init(
+        @src(),
+        .{ .dir = .horizontal },
+        .{ .expand = .horizontal },
+    );
+    tabs.install();
+    defer tabs.deinit();
+
+    for (0.., rplanner.files) |i, filename| {
+        var tab = tabs.addTab(
+            rplanner.open_file == i,
+            .{ .padding = dvui.Rect.all(1) },
+        );
+        defer tab.deinit();
+
+        var tab_box = dvui.box(@src(), .horizontal, .{});
+        defer tab_box.deinit();
+
+        var label_opts = tab.data().options.strip();
+        if (dvui.captured(tab.data().id)) {
+            label_opts.color_text = .text_press;
+        }
+
+        dvui.label(@src(), "{s}", .{filename}, label_opts);
+
+        if (tab.clicked()) {
+            rplanner.open_file = i;
+        }
+
+        // if (tabs.addTabLabel(rplanner.open_file == i, filename)) {
+        //     rplanner.open_file = i;
+        // }
     }
 }
 

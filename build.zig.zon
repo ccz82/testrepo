@@ -8,6 +8,10 @@
             .url = "git+https://github.com/david-vanderson/dvui#822856411635e6a6e286bcf17bf2da83efe624d9",
             .hash = "dvui-0.2.0-AQFJmV22zgDeXKMp_LnsWc7NwsZzJurUeOFGabaWvTlS",
         },
+        .icons = .{
+            .url = "git+https://github.com/nat3Github/zig-lib-icons#8e34a0324d46d73a5a59bda09892ac5140b54c0f",
+            .hash = "icons-0.0.0-iJxA-c33MwAwe2T9SnPQlmpIkKfdNt9jQ5buN-CLufTe",
+        },
     },
     .paths = .{
         "build.zig",

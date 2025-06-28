@@ -10,6 +10,8 @@ pub fn build(b: *std.Build) void {
         .backend = .sdl3,
     });
 
+    const icons_dep = b.dependency("icons", .{});
+
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/app.zig"),
         .target = target,
@@ -17,6 +19,7 @@ pub fn build(b: *std.Build) void {
     });
 
     exe_mod.addImport("dvui", dvui_dep.module("dvui_sdl3"));
+    exe_mod.addImport("icons", icons_dep.module("icons"));
 
     const exe = b.addExecutable(.{
         .name = "rplanner",
