@@ -1,6 +1,6 @@
 const std = @import("std");
 const dvui = @import("dvui");
-const icons = @import("icons");
+const icons = @import("icons").tvg.lucide;
 
 const Rplanner = @import("Rplanner.zig");
 const RplannerLight = @import("themes/light.zig").Theme;
@@ -59,25 +59,12 @@ pub fn frame() !dvui.App.Result {
 
     tabbar();
 
-    {
-        var hbox = dvui.box(@src(), .horizontal, .{
-            .expand = .both,
-            .background = true,
-            .color_fill = .{ .name = .fill_window },
-        });
-        defer hbox.deinit();
-
-        dvui.label(@src(), "This is tab {d}", .{rplanner.open_file}, .{
-            .expand = .both,
-            .gravity_x = 0.5,
-            .gravity_y = 0.5,
-        });
-    }
+    toolbar();
 
     {
         dvui.Examples.show_demo_window = true;
         dvui.Examples.demo();
-        // dvui.Examples.scrollCanvas();
+        dvui.Examples.scrollCanvas();
     }
 
     return switch (rplanner.running) {
@@ -111,49 +98,19 @@ fn menubar() void {
         .{ .submenu = true },
         .{
             .expand = .none,
-            .corner_radius = dvui.Rect.all(0),
-            .padding = .{ .x = 6, .w = 6 },
+            .padding = .{ .x = 5, .w = 5 },
+            .corner_radius = .all(0),
         },
     )) |r| {
         var fm = dvui.floatingMenu(
             @src(),
             .{ .from = r },
             .{
-                .padding = dvui.Rect.all(0),
-                .corner_radius = dvui.Rect.all(0),
+                .padding = .all(0),
+                .corner_radius = .all(0),
             },
         );
         defer fm.deinit();
-
-        {
-            var mi = dvui.menuItem(@src(), .{}, .{});
-            defer mi.deinit();
-
-            var hbox = dvui.box(@src(), .horizontal, .{ .expand = .horizontal });
-            defer hbox.deinit();
-
-            dvui.icon(
-                @src(),
-                "quit",
-                icons.tvg.lucide.@"log-out",
-                .{},
-                .{},
-            );
-
-            dvui.labelNoFmt(@src(), "Quit", .{}, .{ .padding = dvui.Rect.all(0) });
-        }
-
-        if (dvui.menuItemLabel(
-            @src(),
-            "Quit",
-            .{},
-            .{
-                .corner_radius = dvui.Rect.all(0),
-                .padding = .{ .w = 3, .x = 3 },
-            },
-        )) |_| {
-            rplanner.running = false;
-        }
     }
 
     if (dvui.menuItemLabel(
@@ -162,11 +119,11 @@ fn menubar() void {
         .{ .submenu = true },
         .{
             .expand = .none,
-            .corner_radius = dvui.Rect.all(0),
-            .padding = .{ .x = 6, .w = 6 },
+            .corner_radius = .all(0),
+            .padding = .{ .x = 5, .w = 5 },
         },
     )) |r| {
-        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = dvui.Rect.all(0) });
+        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = .all(0) });
         defer fm.deinit();
         _ = dvui.menuItemLabel(@src(), "Dummy", .{}, .{ .expand = .horizontal });
         _ = dvui.menuItemLabel(@src(), "Dummy Long", .{}, .{ .expand = .horizontal });
@@ -179,11 +136,11 @@ fn menubar() void {
         .{ .submenu = true },
         .{
             .expand = .none,
-            .corner_radius = dvui.Rect.all(0),
-            .padding = .{ .x = 6, .w = 6 },
+            .corner_radius = .all(0),
+            .padding = .{ .x = 5, .w = 5 },
         },
     )) |r| {
-        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = dvui.Rect.all(0) });
+        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = .all(0) });
         defer fm.deinit();
         _ = dvui.checkbox(@src(), &rplanner.show_recent_blocks, "Recent Blocks", .{});
         _ = dvui.checkbox(@src(), &rplanner.show_placed_blocks, "Placed Blocks", .{});
@@ -195,11 +152,11 @@ fn menubar() void {
         .{ .submenu = true },
         .{
             .expand = .none,
-            .corner_radius = dvui.Rect.all(0),
-            .padding = .{ .x = 6, .w = 6 },
+            .corner_radius = .all(0),
+            .padding = .{ .x = 5, .w = 5 },
         },
     )) |r| {
-        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = dvui.Rect.all(0) });
+        var fm = dvui.floatingMenu(@src(), .{ .from = r }, .{ .corner_radius = .all(0) });
         defer fm.deinit();
         if (dvui.button(@src(), "Zoom In", .{}, .{})) {
             rplanner.scale = @round(dvui.themeGet().font_body.size * rplanner.scale + 1.0) / dvui.themeGet().font_body.size;
@@ -225,12 +182,16 @@ fn tabbar() void {
     for (0.., rplanner.files) |i, filename| {
         var tab = tabs.addTab(
             rplanner.open_file == i,
-            .{ .padding = dvui.Rect.all(1) },
+            .{
+                .padding = .all(1),
+                .color_fill_press = if (rplanner.open_file == i) .{ .name = .fill_window } else .{ .name = .fill_hover },
+                .color_fill_hover = if (rplanner.open_file == i) .{ .name = .fill_window } else .{ .name = .fill_hover },
+            },
         );
         defer tab.deinit();
 
-        var tab_box = dvui.box(@src(), .horizontal, .{});
-        defer tab_box.deinit();
+        var hbox = dvui.box(@src(), .horizontal, .{ .expand = .horizontal });
+        defer hbox.deinit();
 
         var label_opts = tab.data().options.strip();
         if (dvui.captured(tab.data().id)) {
@@ -242,35 +203,29 @@ fn tabbar() void {
         if (tab.clicked()) {
             rplanner.open_file = i;
         }
-
-        // if (tabs.addTabLabel(rplanner.open_file == i, filename)) {
-        //     rplanner.open_file = i;
-        // }
     }
 }
 
-fn sidebar() void {
-    var sb = dvui.box(@src(), .vertical, .{
-        .expand = .vertical,
-        .background = true,
-        .color_fill = .{ .name = .fill_window },
-    });
-    defer sb.deinit();
-    _ = dvui.label(@src(), "sidebar", .{}, .{});
-    if (rplanner.show_recent_blocks) {
-        _ = dvui.label(@src(), "recent blocks!", .{}, .{});
-    }
-    if (rplanner.show_placed_blocks) {
-        _ = dvui.label(@src(), "placed blocks!", .{}, .{});
-    }
-}
+fn toolbar() void {
+    var hbox = dvui.box(@src(), .horizontal, .{ .expand = .horizontal });
+    defer hbox.deinit();
 
-fn viewport() void {
-    var vp = dvui.box(@src(), .vertical, .{
-        .expand = .both,
-        .background = true,
-        .color_fill = .{ .color = .fromHex("#ffffff") },
-    });
-    defer vp.deinit();
-    _ = dvui.label(@src(), "viewport", .{}, .{});
+    if (dvui.buttonIcon(@src(), "Move", icons.hand, .{}, .{}, .{})) {
+        rplanner.tool = .move;
+        dvui.cursorSet(.hand);
+    }
+
+    if (dvui.buttonIcon(@src(), "Draw", icons.brush, .{}, .{}, .{})) {
+        rplanner.tool = .draw;
+    }
+
+    if (dvui.buttonIcon(@src(), "Erase", icons.eraser, .{}, .{}, .{})) {
+        rplanner.tool = .erase;
+    }
+
+    if (dvui.buttonIcon(@src(), "Paint Bucket", icons.@"paint-bucket", .{}, .{}, .{})) {
+        rplanner.tool = .paint_bucket;
+    }
+
+    dvui.label(@src(), "selected tool: {}", .{rplanner.tool}, .{});
 }

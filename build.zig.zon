@@ -1,7 +1,7 @@
 .{
     .name = .rplanner,
     .version = "0.0.0",
-    .fingerprint = 0x836ae19b99a2e647, // Changing this has security and trust implications.
+    .fingerprint = 0x836ae19b99a2e647,
     .minimum_zig_version = "0.14.1",
     .dependencies = .{
         .dvui = .{
