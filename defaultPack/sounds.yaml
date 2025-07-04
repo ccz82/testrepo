@@ -1,0 +1,79 @@
+# player
+jump: jump.wav
+swoosh: swoosh.wav
+hurt: hurt.mp3
+gainCrystal: gainCrystal.mp3
+
+# ui
+privateMessage: privateMessage.wav
+
+# blocks
+placeBlock: placeBlock.mp3
+digDirt: digDirt.wav
+destroyStone: destroyStone.mp3
+destroyWood: destroyWood.mp3
+destroyGlass: destroyGlass.wav
+openDoor: doorOpen.mp3
+closeDoor: doorClose.mp3
+useKey: useKey.mp3
+lavaHit: lavaHit.mp3
+stepGrass: steps/stepGrass.mp3
+stepStone: steps/stepStone.mp3
+checkpoint: checkpoint.mp3
+spring: spring.mp3
+rocksCrumble: rocksCrumble.mp3
+platformDestroy: platformDestroy.mp3
+splash: splash.wav
+spikeTrap: spikeTrap.wav
+specialEvent: specialEvent.mp3
+eventEnd: eventEnd.mp3
+
+# jingles
+levelUp: levelUp.wav
+completeQuest: questCompleted.wav
+levelClear: levelClear.mp3
+dungeonFail: dungeonFail.mp3
+
+# enemies
+skeletonDeath: enemies/skeletonDie.mp3
+slimeDeath: enemies/slimeDie.mp3
+frogCroak: enemies/frogCroak.mp3
+frogEat: enemies/frogEat.mp3
+wizardSpell: enemies/wizardSpell.mp3
+shotgun: enemies/shotgun.wav
+goblinHurt: enemies/goblinHurt.mp3
+
+# misc
+coin: coin.wav
+itemPop: itemPop.wav
+dungeonDoorsOpen: dungeonDoorsOpen.mp3
+
+# piano
+noteA4: piano/A4.wav
+noteAs4: piano/As4.wav
+noteB4: piano/B4.wav
+noteC4: piano/C4.wav
+noteCs4: piano/Cs4.wav
+noteD4: piano/D4.wav
+noteDs4: piano/Ds4.wav
+noteE4: piano/E4.wav
+noteF4: piano/F4.wav
+noteFs4: piano/Fs4.wav
+noteG4: piano/G4.wav
+noteGs4: piano/Gs4.wav
+noteA5: piano/A5.wav
+noteAs5: piano/As5.wav
+noteB5: piano/B5.wav
+noteC5: piano/C5.wav
+noteCs5: piano/Cs5.wav
+noteD5: piano/D5.wav
+noteDs5: piano/Ds5.wav
+noteE5: piano/E5.wav
+noteF5: piano/F5.wav
+noteFs5: piano/Fs5.wav
+noteG5: piano/G5.wav
+noteGs5: piano/Gs5.wav
+
+# music
+mainMenuTheme: mainMenuTheme.mp3
+
