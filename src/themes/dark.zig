@@ -8,7 +8,7 @@ pub const Theme: dvui.Theme = .{
     .color_err = .{ .r = 248, .g = 113, .b = 113, .a = 255 }, // Red-400 (brighter for dark)
     .color_text = .{ .r = 243, .g = 244, .b = 246, .a = 255 }, // Gray-100
     .color_text_press = .{ .r = 229, .g = 231, .b = 235, .a = 255 }, // Gray-200
-    .color_fill = .{ .r = 17, .g = 24, .b = 39, .a = 255 }, // Gray-900
+    .color_fill = .fromHex("#161717"),
     .color_fill_window = .{ .r = 31, .g = 41, .b = 55, .a = 255 }, // Gray-800
     .color_fill_control = .{ .r = 55, .g = 65, .b = 81, .a = 255 }, // Gray-700
     .color_fill_hover = .{ .r = 75, .g = 85, .b = 99, .a = 255 }, // Gray-600
